@@ -19,6 +19,7 @@ package org.pentaho.platform.api.engine.security.userroledao;
 
 import org.pentaho.platform.api.mt.ITenant;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ import java.util.List;
  * 
  * @author mlowery
  */
-public interface IUserRoleDao {
+public interface IUserRoleDao extends Serializable{
 
   /**
    * Creates user under a specified tenant. If the tenant is null then it will create the user under a default

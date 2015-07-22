@@ -11,34 +11,40 @@
        java.io.tmpdir - Default temp file path -->
   <diskStore path="java.io.tmpdir/_pentaho"/>
 
+    <cacheManagerPeerProviderFactory
+            class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+            properties="peerDiscovery=automatic, multicastGroupAddress=230.0.0.1, multicastGroupPort=4446, timeToLive=32"/>
+    <cacheManagerPeerListenerFactory
+            class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+            properties="port=40001, socketTimeoutMillis=2000"/>
 
-  <!--Default Cache configuration. These will applied to caches programmatically created through
-      the CacheManager.
+    <!--Default Cache configuration. These will applied to caches programmatically created through
+        the CacheManager.
 
-      The following attributes are required:
+        The following attributes are required:
 
-      maxElementsInMemory            - Sets the maximum number of objects that will be created in memory
-      eternal                        - Sets whether elements are eternal. If eternal,  timeouts are ignored and the
-                                       element is never expired.
-      overflowToDisk                 - Sets whether elements can overflow to disk when the in-memory cache
-                                       has reached the maxInMemory limit.
+        maxElementsInMemory            - Sets the maximum number of objects that will be created in memory
+        eternal                        - Sets whether elements are eternal. If eternal,  timeouts are ignored and the
+                                         element is never expired.
+        overflowToDisk                 - Sets whether elements can overflow to disk when the in-memory cache
+                                         has reached the maxInMemory limit.
 
-      The following attributes are optional:
-      timeToIdleSeconds              - Sets the time to idle for an element before it expires.
-                                       i.e. The maximum amount of time between accesses before an element expires
-                                       Is only used if the element is not eternal.
-                                       Optional attribute. A value of 0 means that an Element can idle for infinity.
-                                       The default value is 0.
-      timeToLiveSeconds              - Sets the time to live for an element before it expires.
-                                       i.e. The maximum time between creation time and when an element expires.
-                                       Is only used if the element is not eternal.
-                                       Optional attribute. A value of 0 means that and Element can live for infinity.
-                                       The default value is 0.
-      diskPersistent                 - Whether the disk store persists between restarts of the Virtual Machine.
-                                       The default value is false.
-      diskExpiryThreadIntervalSeconds- The number of seconds between runs of the disk expiry thread. The default value
-                                       is 120 seconds.
-      -->
+        The following attributes are optional:
+        timeToIdleSeconds              - Sets the time to idle for an element before it expires.
+                                         i.e. The maximum amount of time between accesses before an element expires
+                                         Is only used if the element is not eternal.
+                                         Optional attribute. A value of 0 means that an Element can idle for infinity.
+                                         The default value is 0.
+        timeToLiveSeconds              - Sets the time to live for an element before it expires.
+                                         i.e. The maximum time between creation time and when an element expires.
+                                         Is only used if the element is not eternal.
+                                         Optional attribute. A value of 0 means that and Element can live for infinity.
+                                         The default value is 0.
+        diskPersistent                 - Whether the disk store persists between restarts of the Virtual Machine.
+                                         The default value is false.
+        diskExpiryThreadIntervalSeconds- The number of seconds between runs of the disk expiry thread. The default value
+                                         is 120 seconds.
+        -->
 
   <defaultCache
       maxElementsInMemory="1000"
@@ -264,22 +270,30 @@
     </cache>
   -->
 
-  <!-- Cache for the Spring CachingUserDetailsService -->
-  <cache
-      name="userCache"
-      maxEntriesLocalHeap="2000"
-      eternal="false"
-      overflowToDisk="false"
-      timeToIdleSeconds="300"
-      timeToLiveSeconds="600"
-      diskPersistent="false"/>
-  <cache
-      name="userRoleListCache"
-      maxEntriesLocalHeap="2000"
-      eternal="false"
-      overflowToDisk="false"
-      timeToIdleSeconds="300"
-      timeToLiveSeconds="600"
-      diskPersistent="false"/>
+    <!-- Cache for the Spring CachingUserDetailsService -->
+    <cache
+        name="userCache"
+        maxEntriesLocalHeap="2000"
+        eternal="false"
+        overflowToDisk="false"
+        timeToIdleSeconds="300"
+        timeToLiveSeconds="600"
+        diskPersistent="false"
+        diskExpiryThreadIntervalSeconds="120">
+      <cacheEventListenerFactory
+          class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"/>
+    </cache>
+    <cache
+        name="userRoleListCache"
+        maxEntriesLocalHeap="2000"
+        eternal="false"
+        overflowToDisk="false"
+        timeToIdleSeconds="300"
+        timeToLiveSeconds="600"
+        diskPersistent="false"
+        diskExpiryThreadIntervalSeconds="120">
+      <cacheEventListenerFactory
+          class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"/>
+    </cache>
 
 </ehcache>

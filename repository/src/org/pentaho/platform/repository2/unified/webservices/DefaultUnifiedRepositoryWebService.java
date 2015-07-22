@@ -48,7 +48,7 @@ import org.pentaho.platform.security.policy.rolebased.actions.AdministerSecurity
 @WebService( endpointInterface = "org.pentaho.platform.repository2.unified.webservices.IUnifiedRepositoryWebService",
     serviceName = "unifiedRepository", portName = "unifiedRepositoryPort",
     targetNamespace = "http://www.pentaho.org/ws/1.0" )
-public class DefaultUnifiedRepositoryWebService implements IUnifiedRepositoryWebService {
+public class DefaultUnifiedRepositoryWebService implements IUnifiedRepositoryWebService, Serializable {
 
   protected IUnifiedRepository repo;
 

@@ -51,7 +51,7 @@ import org.springframework.util.Assert;
  * 
  * @author mlowery
  */
-public class ExceptionLoggingDecorator implements IUnifiedRepository {
+public class ExceptionLoggingDecorator implements IUnifiedRepository, Serializable {
 
   // ~ Static fields/initializers
   // ======================================================================================

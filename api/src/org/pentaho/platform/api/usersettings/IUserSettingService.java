@@ -20,9 +20,11 @@ package org.pentaho.platform.api.usersettings;
 import org.pentaho.platform.api.engine.IPentahoInitializer;
 import org.pentaho.platform.api.usersettings.pojo.IUserSetting;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface IUserSettingService extends IPentahoInitializer {
+public interface IUserSettingService extends IPentahoInitializer, Serializable
+{
   public void deleteUserSettings();
 
   // if a global setting exists, the user setting has priority
