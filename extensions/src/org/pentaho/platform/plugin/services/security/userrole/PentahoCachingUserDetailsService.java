@@ -36,10 +36,17 @@ public class PentahoCachingUserDetailsService implements UserDetailsService {
   private UserCache userCache = new NullUserCache();
   private UserDetailsService delegate;
   private final ITenantedPrincipleNameResolver nameResolver;
+  private boolean isCaching;
 
   public PentahoCachingUserDetailsService( UserDetailsService delegate, ITenantedPrincipleNameResolver nameResolver ) {
+    this( delegate, nameResolver, false );
+  }
+
+  public PentahoCachingUserDetailsService( UserDetailsService delegate, ITenantedPrincipleNameResolver nameResolver,
+      boolean isCaching) {
     this.delegate = delegate;
     this.nameResolver = nameResolver;
+    this.isCaching = isCaching;
   }
 
   public UserCache getUserCache() {
@@ -81,7 +88,10 @@ public class PentahoCachingUserDetailsService implements UserDetailsService {
                 + " returned null for username " + username + ". " + "This is an interface contract violation" ) );
       }
 
-      userCache.putUserInCache( user );
+      if ( isCaching ) {
+        userCache.putUserInCache( user );
+      }
+
     }
 
     if ( user instanceof NotFoundUserDetails ) {
