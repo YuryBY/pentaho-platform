@@ -272,6 +272,16 @@
   }
   %>
 
+  $( document ).ready(function() {
+    var browserPerspective = window.parent.frames["browser.perspective"];
+    if (browserPerspective){
+      var logingTag = browserPerspective.contentDocument.getElementById("login-wrapper");
+      if (logingTag){
+		window.parent.document.location.reload();
+      }
+    }
+  });
+
   function bounceToReturnLocation() {
     // pass
     var locale = document.login.locale.value;
