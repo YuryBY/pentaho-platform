@@ -12,19 +12,15 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ * Copyright (c) 2002-2017 Pentaho Corporation..  All rights reserved.
  */
 
 package org.pentaho.mantle.client.ui.tabs;
 
-import org.pentaho.gwt.widgets.client.dialogs.IDialogCallback;
-import org.pentaho.gwt.widgets.client.dialogs.PromptDialogBox;
-import org.pentaho.gwt.widgets.client.utils.FrameUtils;
-import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
-import org.pentaho.mantle.client.messages.Messages;
-import org.pentaho.mantle.client.solutionbrowser.MantlePopupPanel;
-import org.pentaho.mantle.client.solutionbrowser.tabs.IFrameTabPanel;
-
+import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -43,6 +39,13 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import org.pentaho.gwt.widgets.client.dialogs.IDialogCallback;
+import org.pentaho.gwt.widgets.client.dialogs.PromptDialogBox;
+import org.pentaho.gwt.widgets.client.utils.FrameUtils;
+import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
+import org.pentaho.mantle.client.messages.Messages;
+import org.pentaho.mantle.client.solutionbrowser.MantlePopupPanel;
+import org.pentaho.mantle.client.solutionbrowser.tabs.IFrameTabPanel;
 
 public class MantleTab extends org.pentaho.gwt.widgets.client.tabs.PentahoTab {
 
@@ -286,6 +289,21 @@ public class MantleTab extends org.pentaho.gwt.widgets.client.tabs.PentahoTab {
       closeAllTabsMenuItem.getElement().setId( "closeAllTabs" ); //$NON-NLS-1$
     }
     popupMenu.setWidget( menuBar );
+    if ( isIEBrowser() ) {
+      Frame iFrame = new Frame( "about:blank" );
+      Style iFrameStyle = iFrame.getElement().getStyle();
+      iFrameStyle.setWidth( 100, Style.Unit.PCT );
+      iFrameStyle.setHeight( 100, Style.Unit.PCT );
+      iFrameStyle.setBorderStyle( Style.BorderStyle.NONE );
+      iFrameStyle.setTop( 0, Unit.PX );
+      iFrameStyle.setPosition( Style.Position.ABSOLUTE );
+      iFrameStyle.setZIndex( -1 );
+      Element element = popupMenu.getElement();
+      Node firstChild = element.getFirstChild();
+      if ( firstChild != null ) {
+        firstChild.appendChild( iFrame.getElement() );
+      }
+    }
     popupMenu.hide();
     popupMenu.show();
   }
@@ -309,4 +327,9 @@ public class MantleTab extends org.pentaho.gwt.widgets.client.tabs.PentahoTab {
   public void setSolutionBrowserShowing( boolean solutionBrowserShowing ) {
     this.solutionBrowserShowing = solutionBrowserShowing;
   }
+
+  private native boolean isIEBrowser()
+  /*-{
+    return !!document.documentMode;
+  }-*/;
 }
